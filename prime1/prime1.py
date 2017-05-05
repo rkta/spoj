@@ -83,6 +83,7 @@ for line in sys.stdin.readlines():
     #continue
     for no in primeset:
         print(no)
+        #sys.stdout.write(str(no) + '\n')
 
     count -= 1
 
