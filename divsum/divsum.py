@@ -18,7 +18,8 @@ with open('/home/kt/primes', 'r') as f:
 
     number = 495873
     sqrtnumber = sqrt(number) + 1
-    factors = [1]
+    factors = []
+    divisors = [1]
 
     print('number: %f' % number)
     print('sqrtnumber: %d' % sqrtnumber)
@@ -28,24 +29,26 @@ with open('/home/kt/primes', 'r') as f:
             print('prime > sqrtnumber')
             break
         if number % prime == 0:
+            factors.append(prime)
             div = prime
             while div <= sqrtnumber:
                 if number % div == 0:
                     wait = input(div)
-                    factors.append(div)
+                    divisors.append(div)
                     if div**2 != number:
-                        factors.append(int(number/div))
+                        divisors.append(int(number/div))
                     wait = input(factors)
                     div += prime
-                    if div in factors:
-                        print('div in factors')
+                    if div in divisors:
+                        print('div in divisors')
                         div += prime
                 else:
                     break
 
 #    print()
-    print(sorted(factors))
-    print(len(factors))
+    print(factors)
+    print(sorted(divisors))
+    print(len(divisors))
 #    print(sum(factors))
 #    S = str(sum(factors))
 #    output = ''
