@@ -1,0 +1,6 @@
+n:              10000
+afterN:         2113556480
+afterMalloc:    2113568768
+afterArray:     2113622016
+afterSort:      2113642496
+afterPrint:     2134040576
