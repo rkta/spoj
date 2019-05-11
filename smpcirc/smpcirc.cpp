@@ -41,7 +41,6 @@ char answer(double d, double r1, double r2)
 
 int main()
 {
-    std::cout << "103 104 5 100 100 10 -> E" << std::endl << "103 104 10 100 100 10 -> O" << std::endl << std::endl;
     int n;
     int *array;
     auto fp = stdin;
@@ -66,7 +65,6 @@ int main()
                 array[i+3],
                 array[i+4]
                 );
-        std::cout << d << " ";
         std::cout << answer(d, array[i+2], array[i+5]) << "\n";
     }
 }
