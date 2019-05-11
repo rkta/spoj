@@ -39,32 +39,37 @@ char answer(double d, double r1, double r2)
     return 'O';
 }
 
+struct data{
+    int* array;
+    int n;
+    int fields;
+};
+
+void read_stdin(struct data* d){
+    auto fp = stdin;
+    fscanf(fp, "%d", &d->n);
+
+    d->array = (int*)malloc(d->fields * d->n * sizeof(*d->array));
+
+    for (int i=0; i < d->fields * d->n; i=i+d->fields) {
+        for (int j = 0; j < d->fields; ++j){
+        fscanf(fp, "%d", &d->array[i+j]);
+        }
+    }
+}
+
 int main()
 {
-    int n;
-    int *array;
-    auto fp = stdin;
+    struct data da;
+    da.fields=6;
+    read_stdin(&da);
 
-    fscanf(fp, "%d", &n);
-
-    array = (int*)malloc(6 * n * sizeof(*array));
-
-    for (int i=0; i < 6 * n; i=i+6) {
-        fscanf(fp, "%d %d %d %d %d %d", &array[i],
-                &array[i+1],
-                &array[i+2],
-                &array[i+3],
-                &array[i+4],
-                &array[i+5]
-              );
-    }
-
-    for (int i=0; i < 6 * n; i=i+6) {
-        double d = point_distance(array[i],
-                array[i+1],
-                array[i+3],
-                array[i+4]
+    for (int i=0; i < da.fields * da.n; i=i+da.fields) {
+        double d = point_distance(da.array[i],
+                da.array[i+1],
+                da.array[i+3],
+                da.array[i+4]
                 );
-        std::cout << answer(d, array[i+2], array[i+5]) << "\n";
+        std::cout << answer(d, da.array[i+2], da.array[i+5]) << "\n";
     }
 }
