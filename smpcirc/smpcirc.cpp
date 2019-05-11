@@ -7,8 +7,8 @@
 // x1, y1, r1, x2, y2, r2
 // with x,y being the center of the circle
 // Sample data
-// "103 104 5 100 100 10"
-// "103 104 10 100 100 10"
+// "103 104 5 100 100 10"   -> E
+// "103 104 10 100 100 10"  -> O
 // Distance: 5 and 5
 
 double point_distance(double x1, double y1, double x2, double y2)
@@ -16,19 +16,32 @@ double point_distance(double x1, double y1, double x2, double y2)
     return sqrt( pow((x2-x1), 2) + pow((y2-y1), 2));
 }
 
-bool is_inside(double d, double r1, double r2)
+char answer(double d, double r1, double r2)
 {
-    return r1 > r2 ? d < r1 : d < r2;
-}
+    double r_max;
+    double r_min;
+    if (r1 > r2){
+        r_max = r1;
+        r_min = r2;
+    } else {
+        r_max = r2;
+        r_min = r1;
+    }
+    bool inside = d < r_max;
+    if (!inside) return 'O';
 
-bool is_overlapping(double d, double r1, double r2)
-{
-    return (r1 + r2) > d;
+    bool contains = (d + r_min < r_max);
+    if (contains) return 'I';
+
+    bool tangent = (d + r_min == r_max);
+    if (tangent) return 'E';
+
+    return 'O';
 }
 
 int main()
 {
-    std::cout << "103 104 5 100 100 10" << std::endl << "103 104 10 100 100 10" << std::endl << std::endl;
+    std::cout << "103 104 5 100 100 10 -> E" << std::endl << "103 104 10 100 100 10 -> O" << std::endl << std::endl;
     int n;
     int *array;
     auto fp = stdin;
@@ -47,8 +60,6 @@ int main()
               );
     }
 
-    std::cout << std::endl;
-
     for (int i=0; i < 6 * n; i=i+6) {
         double d = point_distance(array[i],
                 array[i+1],
@@ -56,12 +67,6 @@ int main()
                 array[i+4]
                 );
         std::cout << d << " ";
-        if (is_inside(d, array[i+2], array[i+5])){
-            printf("%c\n", 'I');
-        } else if ( is_overlapping(d, array[i+2], array[i+5])){
-            printf("%c\n", 'E');
-        } else {
-            printf("%c\n", 'O');
-        }
+        std::cout << answer(d, array[i+2], array[i+5]) << "\n";
     }
 }
