@@ -2,74 +2,65 @@
 #include <stdlib.h>
 #include <cmath>
 #include <iostream>
+#include <limits>
+#include <iomanip>
+#include <vector>
+#include <algorithm>
 
 // Input lines are:
-// x1, y1, r1, x2, y2, r2
-// with x,y being the center of the circle
-// Sample data
-// "103 104 5 100 100 10"   -> E
-// "103 104 10 100 100 10"  -> O
-// Distance: 5 and 5
+// x1, y1
 
-double point_distance(double x1, double y1, double x2, double y2)
-{
-    return sqrt( pow((x2-x1), 2) + pow((y2-y1), 2));
-}
-
-char answer(double d, double r1, double r2)
-{
-    double r_max;
-    double r_min;
-    if (r1 > r2){
-        r_max = r1;
-        r_min = r2;
-    } else {
-        r_max = r2;
-        r_min = r1;
-    }
-    bool inside = d < r_max;
-    if (!inside) return 'O';
-
-    bool contains = (d + r_min < r_max);
-    if (contains) return 'I';
-
-    bool tangent = (d + r_min == r_max);
-    if (tangent) return 'E';
-
-    return 'O';
-}
+struct point{
+    int x;
+    int y;
+    size_t ini_idx;
+};
 
 struct data{
-    int* array;
-    int n;
-    int fields;
+    struct point* array;
+    size_t n;
 };
 
 void read_stdin(struct data* d){
     auto fp = stdin;
-    fscanf(fp, "%d", &d->n);
+    fscanf(fp, "%lu", &d->n);
 
-    d->array = (int*)malloc(d->fields * d->n * sizeof(*d->array));
+    d->array = (struct point*)malloc(d->n * sizeof(*d->array));
 
-    for (int i=0; i < d->fields * d->n; i=i+d->fields) {
-        for (int j = 0; j < d->fields; ++j){
-        fscanf(fp, "%d", &d->array[i+j]);
-        }
+    for (size_t i=0; i < d->n; ++i) {
+        int x;
+        int y;
+        fscanf(fp, "%d %d", &x, &y);
+        d->array[i] = { .x = x, .y = y, .ini_idx = i };
     }
+}
+
+double point_distance(const struct point& p1, const struct point& p2)
+{
+    return sqrt(pow((p2.x-p1.x), 2) + pow((p2.y-p1.y), 2));
+}
+
+bool cmp_x (const struct point &a, const struct point &b)
+{
+    return a.x < b.x;
 }
 
 int main()
 {
     struct data da;
-    da.fields=6;
     read_stdin(&da);
 
-    for (int i=0; i < da.fields * da.n; i=i+da.fields) {
-        double d = point_distance(da.array[i],
-                da.array[i+1],
-                da.array[i+3],
-                da.array[i+4]
-                );
-        std::cout << answer(d, da.array[i+2], da.array[i+5]) << "\n";
+    std::vector <struct point> points(da.array, da.array+da.n);
+
+    std::sort(points.begin(), points.end(), cmp_x);
+
+    double min_dist = std::numeric_limits<double>::max();
+
+    for (size_t i=1; i < points.size(); ++i) {
+        double d = point_distance(points[0], points[i]);
+        if ( d < min_dist ) { min_dist = d; }
+        std::cout << std::setw(3) << std::right << points[i].x << " " << std::setw(3) << std::right << points[i].y << " " << d << "\n";
     }
+    std::cout << "mid_dist: " << min_dist << "\n";
+    free(da.array);
 }
