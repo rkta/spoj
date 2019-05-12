@@ -45,6 +45,25 @@ bool cmp_x (const struct point &a, const struct point &b)
     return a.x < b.x;
 }
 
+double dist_all(const std::vector<point>& points, bool skip = true)
+{
+    double min_dist = std::numeric_limits<double>::max();
+    for (size_t i=1; i < points.size(); ++i) {
+        std::cout << points[i].x << " " << points[i].y << "\n";
+        for (size_t j = i + 1; j < points.size(); ++j) {
+            if (skip) {
+                if ( (points[j].x - points[i].x) > min_dist) {break;}
+            }
+            double d = point_distance(points[i], points[j]);
+            if ( d < min_dist ) { min_dist = d; }
+            std::cout << std::setw(3) << std::right << points[j].x << " " << std::setw(3) << std::right << points[j].y << " " << d << "\n";
+        }
+        std::cout << "min_dist: " << min_dist << "\n";
+        std::cout << std::endl;
+    }
+    return min_dist;
+}
+
 int main()
 {
     struct data da;
@@ -59,35 +78,9 @@ int main()
     }
     std::cout << std::endl;
 
-    double min_dist = std::numeric_limits<double>::max();
-    double min_dist_break = std::numeric_limits<double>::max();
+    double min_dist = dist_all(points, false);
+    double min_dist_break = dist_all(points);
 
-    // w/o break
-    for (size_t i = 0; i < points.size(); ++i) {
-        std::cout << points[i].x << " " << points[i].y << "\n";
-        for (size_t j = i + 1; j < points.size(); ++j) {
-            double d = point_distance(points[i], points[j]);
-            if ( d < min_dist ) { min_dist = d; }
-            std::cout << std::setw(3) << std::right << points[j].x << " " << std::setw(3) << std::right << points[j].y << " " << d << "\n";
-        }
-        std::cout << "min_dist: " << min_dist << "\n";
-        std::cout << std::endl;
-    }
-    std::cout << std::endl;
-
-    for (size_t i=1; i < points.size(); ++i) {
-        std::cout << points[i].x << " " << points[i].y << "\n";
-        for (size_t j = i + 1; j < points.size(); ++j) {
-            if (skip) {
-                if ( (points[j].x - points[i].x) > min_dist_break) {break;}
-            }
-            double d = point_distance(points[i], points[j]);
-            if ( d < min_dist_break ) { min_dist_break = d; }
-            std::cout << std::setw(3) << std::right << points[j].x << " " << std::setw(3) << std::right << points[j].y << " " << d << "\n";
-        }
-        std::cout << "min_dist_break: " << min_dist_break << "\n";
-        std::cout << std::endl;
-    }
     std::cout << "min_dist_break: " << min_dist_break << "\n";
     std::cout << "min_dist: " << min_dist << "\n";
 
