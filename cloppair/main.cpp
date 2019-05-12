@@ -92,26 +92,26 @@ int main()
 
     std::sort(points.begin(), points.end(), cmp_x);
 
-    std::cout << "input data sorted:\n";
-    std::cout << std::setw(3) << std::right << "x" << std::setw(3) << std::right << "y" << std::setw(3) << std::right << "i" << "\n";
-    for (size_t i=0; i < points.size(); ++i){
-        std::cout << std::setw(3) << std::right << points[i].x << " " << std::setw(3) << std::right << points[i].y << " " << std::setw(3) << std::right << points[i].ini_idx << "\n";
-    }
-    std::cout << std::endl;
+    //std::cout << "input data sorted:\n";
+    //std::cout << std::setw(3) << std::right << "x" << std::setw(3) << std::right << "y" << std::setw(3) << std::right << "i" << "\n";
+    //for (size_t i=0; i < points.size(); ++i){
+    //    std::cout << std::setw(3) << std::right << points[i].x << " " << std::setw(3) << std::right << points[i].y << " " << std::setw(3) << std::right << points[i].ini_idx << "\n";
+    //}
+    //std::cout << std::endl;
 
-    struct result min_dist = dist_all<&point::x>(points.begin(), points.end(), false);
-    struct result min_dist_break = dist_all<&point::x>(points.begin(), points.end());
+    //struct result min_dist = dist_all<&point::x>(points.begin(), points.end(), false);
+    //struct result min_dist_break = dist_all<&point::x>(points.begin(), points.end());
 
     auto median = points.begin() + points.size()/2;
-    std::cout << "L--------------------------------------------------------------------------------\n";
-    struct result min_distL = dist_all<&point::x>(points.begin(), median, false);
-    struct result min_distL_break = dist_all<&point::x>(points.begin(), median);
-    std::cout << "R--------------------------------------------------------------------------------\n";
-    struct result min_distR = dist_all<&point::x>(median, points.end(), false);
-    struct result min_distR_break = dist_all<&point::x>(median, points.end());
+    //std::cout << "L--------------------------------------------------------------------------------\n";
+    //struct result min_distL = dist_all<&point::x>(points.begin(), median, false);
+    struct result min_distL = dist_all<&point::x>(points.begin(), median);
+    //std::cout << "R--------------------------------------------------------------------------------\n";
+    //struct result min_distR = dist_all<&point::x>(median, points.end(), false);
+    struct result min_distR = dist_all<&point::x>(median, points.end());
 
+    //double min_distT = std::min(min_distL.min_dist, min_distR.min_dist);
     double min_distT = std::min(min_distL.min_dist, min_distR.min_dist);
-    double min_distT_break = std::min(min_distL_break.min_dist, min_distR_break.min_dist);
 
     std::vector<struct point> s;
     for (auto& p : points){
@@ -127,11 +127,12 @@ int main()
     //    std::cout << std::setw(3) << std::right << p.x << " " << std::setw(3) << std::right << p.y << "\n";
     //}
 
-    std::cout << "min_dist_break: " << min_dist_break.min_dist << " idx: " << min_dist_break.lo_idx << " " << min_dist_break.up_idx << "\n";
-    std::cout << "min_dist: " << min_dist.min_dist << " idx: " << min_dist.lo_idx << " " << min_dist.up_idx << "\n";
+    //std::cout << "min_dist_break: " << min_dist_break.min_dist << " idx: " << min_dist_break.lo_idx << " " << min_dist_break.up_idx << "\n";
+    //std::cout << "min_dist: " << min_dist.min_dist << " idx: " << min_dist.lo_idx << " " << min_dist.up_idx << "\n";
     std::cout << "min_dist L: " << min_distL.min_dist << " idx: " << min_distL.lo_idx << " " << min_distL.up_idx << "\n";
     std::cout << "min_dist R: " << min_distR.min_dist << " idx: " << min_distR.lo_idx << " " << min_distR.up_idx << "\n";
     std::cout << "min_dist S: " << min_distS.min_dist << " idx: " << min_distS.lo_idx << " " << min_distS.up_idx << "\n";
 
+    //cout << fixed << setprecision(6);
     free(da.array);
 }
