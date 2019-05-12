@@ -110,28 +110,39 @@ int main()
     //struct result min_distR = dist_all<&point::x>(median, points.end(), false);
     struct result min_distR = dist_all<&point::x>(median, points.end());
 
-    //double min_distT = std::min(min_distL.min_dist, min_distR.min_dist);
-    double min_distT = std::min(min_distL.min_dist, min_distR.min_dist);
+    struct result min_distT;
+    if (min_distL.min_dist < min_distR.min_dist){
+        min_distT = min_distL;
+    } else {
+        min_distT = min_distR;
+    }
 
     std::vector<struct point> s;
     for (auto& p : points){
-        if (std::abs(p.x - median->x) < min_distT){
+        if (std::abs(p.x - median->x) < min_distT.min_dist){
             s.push_back(p);
         }
     }
-    std::sort(s.begin(), s.end(), cmp_y);
-    struct result min_distS = dist_all<&point::x>(s.begin(), s.end(), false);
+    if (s.size() > 1){
+        std::sort(s.begin(), s.end(), cmp_y);
+        struct result min_distS = dist_all<&point::x>(s.begin(), s.end(), false);
+        if (min_distS.min_dist < min_distT.min_dist){
+            min_distT = min_distS;
+        }
 
-    //std::cout << "array s:\n";
-    //for (auto& p : s){
-    //    std::cout << std::setw(3) << std::right << p.x << " " << std::setw(3) << std::right << p.y << "\n";
-    //}
+        //std::cout << "array s:\n";
+        //for (auto& p : s){
+        //    std::cout << std::setw(3) << std::right << p.x << " " << std::setw(3) << std::right << p.y << " idx: " << p.ini_idx << "\n";
+        //}
+        //std::cout << "\n";
+        //std::cout << "min_dist S: " << min_distS.min_dist << " idx: " << min_distS.lo_idx << " " << min_distS.up_idx << "\n";
+    }
 
     //std::cout << "min_dist_break: " << min_dist_break.min_dist << " idx: " << min_dist_break.lo_idx << " " << min_dist_break.up_idx << "\n";
     //std::cout << "min_dist: " << min_dist.min_dist << " idx: " << min_dist.lo_idx << " " << min_dist.up_idx << "\n";
-    std::cout << "min_dist L: " << min_distL.min_dist << " idx: " << min_distL.lo_idx << " " << min_distL.up_idx << "\n";
-    std::cout << "min_dist R: " << min_distR.min_dist << " idx: " << min_distR.lo_idx << " " << min_distR.up_idx << "\n";
-    std::cout << "min_dist S: " << min_distS.min_dist << " idx: " << min_distS.lo_idx << " " << min_distS.up_idx << "\n";
+    //std::cout << "min_dist L: " << min_distL.min_dist << " idx: " << min_distL.lo_idx << " " << min_distL.up_idx << "\n";
+    //std::cout << "min_dist R: " << min_distR.min_dist << " idx: " << min_distR.lo_idx << " " << min_distR.up_idx << "\n";
+    std::cout << "min_dist: " << min_distT.min_dist << " idx: " << min_distT.lo_idx << " " << min_distT.up_idx << "\n";
 
     //cout << fixed << setprecision(6);
     free(da.array);
