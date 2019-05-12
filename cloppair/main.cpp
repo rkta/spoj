@@ -54,13 +54,42 @@ int main()
 
     std::sort(points.begin(), points.end(), cmp_x);
 
+    for (size_t i=0; i < points.size(); ++i){
+        std::cout << std::setw(3) << std::right << points[i].x << " " << std::setw(3) << std::right << points[i].y << "\n";
+    }
+    std::cout << std::endl;
+
     double min_dist = std::numeric_limits<double>::max();
+    double min_dist_break = std::numeric_limits<double>::max();
+
+    // w/o break
+    for (size_t i = 0; i < points.size(); ++i) {
+        std::cout << points[i].x << " " << points[i].y << "\n";
+        for (size_t j = i + 1; j < points.size(); ++j) {
+            double d = point_distance(points[i], points[j]);
+            if ( d < min_dist ) { min_dist = d; }
+            std::cout << std::setw(3) << std::right << points[j].x << " " << std::setw(3) << std::right << points[j].y << " " << d << "\n";
+        }
+        std::cout << "min_dist: " << min_dist << "\n";
+        std::cout << std::endl;
+    }
+    std::cout << std::endl;
 
     for (size_t i=1; i < points.size(); ++i) {
-        double d = point_distance(points[0], points[i]);
-        if ( d < min_dist ) { min_dist = d; }
-        std::cout << std::setw(3) << std::right << points[i].x << " " << std::setw(3) << std::right << points[i].y << " " << d << "\n";
+        std::cout << points[i].x << " " << points[i].y << "\n";
+        for (size_t j = i + 1; j < points.size(); ++j) {
+            if (skip) {
+                if ( (points[j].x - points[i].x) > min_dist_break) {break;}
+            }
+            double d = point_distance(points[i], points[j]);
+            if ( d < min_dist_break ) { min_dist_break = d; }
+            std::cout << std::setw(3) << std::right << points[j].x << " " << std::setw(3) << std::right << points[j].y << " " << d << "\n";
+        }
+        std::cout << "min_dist_break: " << min_dist_break << "\n";
+        std::cout << std::endl;
     }
-    std::cout << "mid_dist: " << min_dist << "\n";
+    std::cout << "min_dist_break: " << min_dist_break << "\n";
+    std::cout << "min_dist: " << min_dist << "\n";
+
     free(da.array);
 }
