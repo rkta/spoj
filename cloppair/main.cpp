@@ -30,6 +30,7 @@ struct result{
 void read_stdin(struct data* d){
     auto fp = stdin;
     fscanf(fp, "%lu", &d->n);
+    std::cout << d->n << "\n";
 
     d->array = (struct point*)malloc(d->n * sizeof(*d->array));
 
