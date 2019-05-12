@@ -45,18 +45,20 @@ bool cmp_x (const struct point &a, const struct point &b)
     return a.x < b.x;
 }
 
-double dist_all(const std::vector<point>& points, bool skip = true)
+double dist_all(std::vector<point>::iterator begin,
+        std::vector<point>::iterator end,
+        bool skip = true)
 {
     double min_dist = std::numeric_limits<double>::max();
-    for (size_t i=1; i < points.size(); ++i) {
-        std::cout << points[i].x << " " << points[i].y << "\n";
-        for (size_t j = i + 1; j < points.size(); ++j) {
+    for (auto it = begin; it != end; ++it){
+        std::cout << it->x << " " << it->y << "\n";
+        for (auto jt = it + 1; jt != end; ++jt){
             if (skip) {
-                if ( (points[j].x - points[i].x) > min_dist) {break;}
+                if ( (jt->x - it->x) > min_dist) {break;}
             }
-            double d = point_distance(points[i], points[j]);
+            double d = point_distance(*it, *jt);
             if ( d < min_dist ) { min_dist = d; }
-            std::cout << std::setw(3) << std::right << points[j].x << " " << std::setw(3) << std::right << points[j].y << " " << d << "\n";
+            std::cout << std::setw(3) << std::right << jt->x << " " << std::setw(3) << std::right << jt->y << " " << d << "\n";
         }
         std::cout << "min_dist: " << min_dist << "\n";
         std::cout << std::endl;
@@ -78,8 +80,8 @@ int main()
     }
     std::cout << std::endl;
 
-    double min_dist = dist_all(points, false);
-    double min_dist_break = dist_all(points);
+    double min_dist = dist_all(points.begin(), points.end(), false);
+    double min_dist_break = dist_all(points.begin(), points.end());
 
     std::cout << "min_dist_break: " << min_dist_break << "\n";
     std::cout << "min_dist: " << min_dist << "\n";
